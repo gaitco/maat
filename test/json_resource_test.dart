@@ -194,7 +194,7 @@ class _NestedResource extends JsonResource<_User> {
   };
 }
 
-/// Stands in for a `maat_seshat_core` model: `packages/maat` must not depend
+/// Stands in for a `seshat` model: `packages/maat` must not depend
 /// on the ORM, so `whenLoaded` reaches for `loadedRelations` dynamically.
 class _FakeModel {
   _FakeModel(this.loadedRelations);
