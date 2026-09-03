@@ -10,6 +10,15 @@ class EventFake extends Dispatcher {
   final List<Type> only;
   final List<Object> _dispatched = [];
 
+  @override
+  FutureOr<void> Function(Object event)? get afterDispatch =>
+      _dispatcher.afterDispatch;
+
+  @override
+  set afterDispatch(FutureOr<void> Function(Object event)? callback) {
+    _dispatcher.afterDispatch = callback;
+  }
+
   bool _fakes(Object event) => only.isEmpty || only.contains(event.runtimeType);
 
   @override

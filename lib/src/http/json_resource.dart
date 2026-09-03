@@ -76,7 +76,7 @@ abstract class JsonResource<T> {
   /// [when] and [whenLoaded] already hand this marker across package
   /// boundaries, so the value is public even though its name is not. Anything
   /// building its own container out of them — `resourceCollection` in
-  /// `seshat_maat`, for one — needs to recognise it in order to pass it
+  /// `maat_seshat`, for one — needs to recognise it in order to pass it
   /// through untouched. Without this, callers are forced to reconstruct the
   /// marker by identity, which welds them to today's representation.
   static bool isMissing(Object? value) => identical(value, _missing);

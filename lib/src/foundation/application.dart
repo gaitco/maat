@@ -68,13 +68,18 @@ class Application extends Container {
   /// Absolute path for a path relative to [basePath].
   String path(String relative) => p.join(basePath, relative);
 
-  /// Serve HTTP. `shared: true` lets a later `--isolates=N` bind the same port.
-  Future<HttpServer> serve({String host = '0.0.0.0', int port = 8000}) async {
+  /// Serve HTTP. Direct servers bind exclusively unless a worker coordinator
+  /// explicitly enables port sharing.
+  Future<HttpServer> serve({
+    String host = '0.0.0.0',
+    int port = 8000,
+    bool shared = false,
+  }) async {
     final server = await shelf_io.serve(
       make<HttpKernel>().handleShelf,
       host,
       port,
-      shared: true,
+      shared: shared,
     );
     _servers.add(server);
     Log.info('Maat listening on http://${server.address.host}:${server.port}');
@@ -114,12 +119,25 @@ class Application extends Container {
     final running = <_ApplicationWorker>[];
     var sharedPort = port;
     try {
+      if (workers > 1) {
+        // ponytail: a process can claim the port after this probe closes;
+        // distribute a parent-owned socket if that startup race is observed.
+        final probe = await ServerSocket.bind(host, port);
+        sharedPort = probe.port;
+        await probe.close();
+      }
       for (var i = 0; i < workers; i++) {
         final ready = ReceivePort();
         final exit = ReceivePort();
         await Isolate.spawn(
           _serveWorker,
-          _WorkerStart(bootstrap, host, sharedPort, ready.sendPort),
+          _WorkerStart(
+            bootstrap,
+            host,
+            sharedPort,
+            workers > 1,
+            ready.sendPort,
+          ),
           onExit: exit.sendPort,
           debugName: 'maat-worker-${i + 1}',
         );
@@ -173,10 +191,11 @@ class ApplicationWorkers {
 }
 
 class _WorkerStart {
-  _WorkerStart(this.bootstrap, this.host, this.port, this.ready);
+  _WorkerStart(this.bootstrap, this.host, this.port, this.shared, this.ready);
   final Future<Application> Function() bootstrap;
   final String host;
   final int port;
+  final bool shared;
   final SendPort ready;
 }
 
@@ -192,7 +211,11 @@ Future<void> _serveWorker(_WorkerStart start) async {
   final commands = ReceivePort();
   try {
     final application = await start.bootstrap();
-    final server = await application.serve(host: start.host, port: start.port);
+    final server = await application.serve(
+      host: start.host,
+      port: start.port,
+      shared: start.shared,
+    );
     start.ready.send(['ready', commands.sendPort, server.port]);
     final force = await commands.first as bool;
     await application.shutdown(force: force);

@@ -24,6 +24,8 @@ class _Registration {
 class Dispatcher {
   final List<_Registration> _listeners = [];
 
+  FutureOr<void> Function(Object event)? afterDispatch;
+
   void listen<E extends Object>(ListenerCallback<E> listener) {
     _listeners.add(
       _Registration(E, (event) => event is E, (event) => listener(event as E)),
@@ -37,6 +39,7 @@ class Dispatcher {
       if (response == false) break;
       responses.add(response);
     }
+    await afterDispatch?.call(event);
     return responses;
   }
 

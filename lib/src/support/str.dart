@@ -1,5 +1,9 @@
+import 'dart:math';
+
 /// String helpers mirroring Laravel's `Str` facade (Phase 1 subset).
 abstract final class Str {
+  static final Random _secureRandom = Random.secure();
+
   /// `PostController` -> `post_controller`.
   static String snake(String value, [String delimiter = '_']) {
     final withDelims = value
@@ -33,4 +37,17 @@ abstract final class Str {
       .where((word) => word.isNotEmpty)
       .map((word) => word[0].toUpperCase() + word.substring(1))
       .join(' ');
+
+  /// Returns a cryptographically random RFC 4122 version 4 UUID.
+  static String uuid() {
+    final bytes = List<int>.generate(16, (_) => _secureRandom.nextInt(256));
+    bytes[6] = (bytes[6] & 0x0f) | 0x40;
+    bytes[8] = (bytes[8] & 0x3f) | 0x80;
+    final hex = bytes
+        .map((byte) => byte.toRadixString(16).padLeft(2, '0'))
+        .join();
+    return '${hex.substring(0, 8)}-${hex.substring(8, 12)}-'
+        '${hex.substring(12, 16)}-${hex.substring(16, 20)}-'
+        '${hex.substring(20)}';
+  }
 }

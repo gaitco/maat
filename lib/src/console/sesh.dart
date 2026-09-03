@@ -3,7 +3,9 @@ import 'dart:io';
 import '../foundation/application.dart';
 import 'command.dart';
 import 'commands/about_command.dart';
+import 'commands/channel_list_command.dart';
 import 'commands/key_generate_command.dart';
+import 'commands/make_channel_command.dart';
 import 'commands/make_command_command.dart';
 import 'commands/make_controller_command.dart';
 import 'commands/make_event_command.dart';
@@ -35,7 +37,9 @@ class Sesh {
   /// Framework commands. Later tasks add entries here.
   static List<Command> builtIn() => [
     AboutCommand(),
+    ChannelListCommand(),
     KeyGenerateCommand(),
+    MakeChannelCommand(),
     MakeCommandCommand(),
     MakeControllerCommand(),
     MakeEventCommand(),
