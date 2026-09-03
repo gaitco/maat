@@ -147,6 +147,18 @@ class $className with Dispatchable {
 }
 ''';
 
+  static String channel(String className) =>
+      '''
+import 'package:maat/maat.dart';
+
+void register$className() {
+  Broadcast.channel('orders.{id}', (user, params) async {
+    // TODO: Replace with application-specific ownership logic.
+    return false;
+  });
+}
+''';
+
   static String listener(String className, String? eventClass) {
     final event = eventClass ?? 'Object';
     final eventImport = eventClass == null

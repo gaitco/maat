@@ -18,6 +18,44 @@ Future<Application> bootstrapWorkerApp() async {
 }
 
 void main() {
+  test('serve refuses a port already shared by another server', () async {
+    final occupied = await HttpServer.bind(
+      InternetAddress.loopbackIPv4,
+      0,
+      shared: true,
+    );
+    addTearDown(() => occupied.close(force: true));
+    final application = await bootstrapWorkerApp();
+    addTearDown(() => application.shutdown(force: true));
+
+    await expectLater(
+      application.serve(host: '127.0.0.1', port: occupied.port),
+      throwsA(isA<SocketException>()),
+    );
+  });
+
+  test('serveWorkers refuses a port shared by another server', () async {
+    final occupied = await HttpServer.bind(
+      InternetAddress.loopbackIPv4,
+      0,
+      shared: true,
+    );
+    addTearDown(() => occupied.close(force: true));
+
+    try {
+      final server = await Application.serveWorkers(
+        bootstrapWorkerApp,
+        host: '127.0.0.1',
+        port: occupied.port,
+        workers: 2,
+      );
+      await server.close(force: true);
+      fail('serveWorkers bound a port owned by another server');
+    } on SocketException {
+      // Expected: an unrelated listener owns the requested port.
+    }
+  });
+
   test(
     'serveWorkers boots workers on one port and closes them together',
     () async {

@@ -26,5 +26,19 @@ void main() {
       expect(Str.headline('OrderShipped'), 'Order Shipped');
       expect(Str.headline('password_reset'), 'Password Reset');
     });
+
+    test('uuid returns distinct RFC 4122 version 4 values', () {
+      final first = Str.uuid();
+      final second = Str.uuid();
+      expect(first, isNot(second));
+      expect(
+        first,
+        matches(
+          RegExp(
+            r'^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
+          ),
+        ),
+      );
+    });
   });
 }

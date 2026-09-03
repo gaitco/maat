@@ -11,7 +11,7 @@ import '../config/config.dart';
 /// argon2id, because a password is low-entropy and an attacker holding
 /// the table will try billions of guesses: verification is meant to be
 /// slow. API tokens are the opposite case and are hashed with SHA-256 —
-/// see `cartouche`.
+/// see `maat_cartouche`.
 abstract final class Hash {
   /// 16 bytes, the argon2 specification's recommendation and what every
   /// other implementation emits: a salt only has to be unique, and a
