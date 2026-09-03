@@ -16,7 +16,7 @@ await app.serve();
 Create a project with Ptah:
 
 ```bash
-dart pub global activate maat_ptah
+dart pub global activate ptah
 maat new blog
 ```
 

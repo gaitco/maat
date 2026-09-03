@@ -41,7 +41,7 @@ abstract class GeneratorCommand extends Command with GeneratesFiles {
 }
 
 /// `writeGenerated`, factored out of [GeneratorCommand] so a command that
-/// can't extend it — [MakeMigrationCommand] in `maat_seshat`, which
+/// can't extend it — [MakeMigrationCommand] in `seshat_maat`, which
 /// needs `Command`'s bare `handle` because it writes two generated files
 /// (the migration stub and the rewritten registry) rather than one — can
 /// still route every generated file through the same formatting step.
