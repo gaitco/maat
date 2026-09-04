@@ -28,6 +28,14 @@ abstract final class Str {
         .join();
   }
 
+  /// `post_controller` -> `postController`.
+  static String camel(String value) {
+    final studly = Str.studly(value);
+    return studly.isEmpty
+        ? studly
+        : studly[0].toLowerCase() + studly.substring(1);
+  }
+
   /// `PostController` -> `post-controller`.
   static String kebab(String value) => snake(value, '-');
 

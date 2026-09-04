@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img">
+  <title>Anubis Auth — guarded access</title>
+  <rect width="128" height="128" rx="28" fill="#0B1628"/>
+  <circle cx="103" cy="25" r="6" fill="#C7543D"/>
+  <g fill="none" stroke="#FFF9EA" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M43 87V55l11-25 12 16 29 4-17 14v23"/>
+        <path d="M43 57 31 46l4 28 8 13h35M63 62h1"/>
+  </g>
+  <path d="M25 104h78" fill="none" stroke="#C7543D" stroke-width="5" stroke-linecap="round"/>
+</svg>

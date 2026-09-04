@@ -18,6 +18,13 @@ void main() {
       expect(Str.studly('PostController'), 'PostController');
     });
 
+    test('camel lowercases the first word only', () {
+      expect(Str.camel('post_controller'), 'postController');
+      expect(Str.camel('books_store'), 'booksStore');
+      expect(Str.camel('PostController'), 'postController');
+      expect(Str.camel(''), '');
+    });
+
     test('kebab', () {
       expect(Str.kebab('PostController'), 'post-controller');
     });

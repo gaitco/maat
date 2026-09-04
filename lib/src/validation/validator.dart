@@ -24,23 +24,6 @@ class RuleContext {
   final bool present;
 }
 
-class _ParsedRule {
-  _ParsedRule(this.name, this.params);
-  final String name;
-  final List<String> params;
-
-  static _ParsedRule parse(String rule) {
-    final colon = rule.indexOf(':');
-    if (colon < 0) return _ParsedRule(rule, const []);
-    final name = rule.substring(0, colon);
-    final rest = rule.substring(colon + 1);
-    if (name == 'regex' || name == 'not_regex') {
-      return _ParsedRule(name, [rest]);
-    }
-    return _ParsedRule(name, rest.split(','));
-  }
-}
-
 /// Laravel's validator: rule strings, implicit rules, wildcards, messages.
 class Validator {
   Validator(
@@ -50,7 +33,7 @@ class Validator {
     this.attributes = const {},
   }) : _originalKeys = rules.keys.toList() {
     for (final entry in rules.entries) {
-      final parsed = _parseRules(entry.value);
+      final parsed = parseRuleSet(entry.value);
       for (final key in _expandKey(entry.key)) {
         _rules[key] = parsed;
         _primary[key] = entry.key;
@@ -205,7 +188,7 @@ class Validator {
   }
 
   bool hasRule(String attribute, String rule) => (_rules[attribute] ?? const [])
-      .any((r) => r is _ParsedRule && r.name == rule);
+      .any((r) => r is ParsedRule && r.name == rule);
   bool hasNumericRule(String attribute) =>
       _numericRules.any((r) => hasRule(attribute, r));
 
@@ -264,13 +247,13 @@ class Validator {
     for (final entry in _rules.entries) {
       final attribute = entry.key;
       final rules = entry.value;
-      final names = rules.whereType<_ParsedRule>().map((r) => r.name).toSet();
+      final names = rules.whereType<ParsedRule>().map((r) => r.name).toSet();
       final (present, value) = _lookup(attribute);
       if (names.contains('sometimes') && !present) continue;
       final nullable = names.contains('nullable');
       for (var i = 0; i < rules.length; i++) {
         final rule = rules[i];
-        if (rule is! _ParsedRule) continue;
+        if (rule is! ParsedRule) continue;
         final check = _customAsync[rule.name];
         if (check == null) continue;
         if (!_shouldRun(false, present, value, nullable)) continue;
@@ -309,7 +292,7 @@ class Validator {
       final attribute = entry.key;
       final (present, value) = _lookup(attribute);
       final rules = entry.value;
-      final names = rules.whereType<_ParsedRule>().map((r) => r.name).toSet();
+      final names = rules.whereType<ParsedRule>().map((r) => r.name).toSet();
       if (names.contains('sometimes') && !present) continue;
       final nullable = names.contains('nullable');
       final bail = names.contains('bail');
@@ -325,7 +308,7 @@ class Validator {
           }
           continue;
         }
-        final parsed = rule as _ParsedRule;
+        final parsed = rule as ParsedRule;
         if (_controlRules.contains(parsed.name)) continue;
         final implicit =
             implicitRules.contains(parsed.name) ||
@@ -365,7 +348,7 @@ class Validator {
   void _assertNoUnresolvedAsyncRule() {
     if (_asyncResults != null || _customAsync.isEmpty) return;
     for (final rules in _rules.values) {
-      for (final rule in rules.whereType<_ParsedRule>()) {
+      for (final rule in rules.whereType<ParsedRule>()) {
         if (_customAsync.containsKey(rule.name)) {
           throw StateError(
             'The "${rule.name}" rule runs asynchronously and cannot be '
@@ -385,7 +368,7 @@ class Validator {
     return true;
   }
 
-  String _message(_ParsedRule rule, String attribute, dynamic value) {
+  String _message(ParsedRule rule, String attribute, dynamic value) {
     final custom =
         messages['${_primary[attribute]}.${rule.name}'] ??
         messages['$attribute.${rule.name}'] ??
@@ -443,29 +426,6 @@ class Validator {
           .replaceAll(':value', p1);
     }
     return out;
-  }
-
-  static List<Object> _parseRules(Object rules) {
-    if (rules is String) {
-      return [
-        for (final r in rules.split('|'))
-          if (r.isNotEmpty) _ParsedRule.parse(r),
-      ];
-    }
-    if (rules is List) {
-      return [
-        for (final r in rules)
-          if (r is Rule)
-            r
-          else if (r is String)
-            ..._parseRules(r)
-          else
-            throw ArgumentError('Invalid rule $r'),
-      ];
-    }
-    throw ArgumentError(
-      'Rules must be a String or a List, got ${rules.runtimeType}',
-    );
   }
 
   /// `items.*.name` -> `items.0.name`, `items.1.name`, ... against [data].

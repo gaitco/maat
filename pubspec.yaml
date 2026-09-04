@@ -1,6 +1,6 @@
 name: maat
 description: A full-stack backend framework for Dart with routing, validation, authentication, and production HTTP serving.
-version: 0.1.1
+version: 0.1.2
 repository: https://github.com/gaitco/maat
 environment:
   sdk: ^3.12.0

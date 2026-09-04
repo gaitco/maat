@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img">
+  <title>Ptah Installer — the maker's tools</title>
+  <rect width="128" height="128" rx="28" fill="#0B1628"/>
+  <circle cx="103" cy="25" r="6" fill="#C7543D"/>
+  <g fill="none" stroke="#FFF9EA" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M38 36l49 49M84 34l10 10-50 50-10-10 50-50ZM30 46l16-16 13 13-16 16"/>
+  </g>
+  <path d="M25 104h78" fill="none" stroke="#C7543D" stroke-width="5" stroke-linecap="round"/>
+</svg>

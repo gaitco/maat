@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img">
+  <title>Horus Client — the application's eye</title>
+  <rect width="128" height="128" rx="28" fill="#0B1628"/>
+  <circle cx="103" cy="25" r="6" fill="#27B7A8"/>
+  <g fill="none" stroke="#FFF9EA" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M28 58c12-15 28-22 47-18 10 2 19 8 26 17-13 10-27 15-42 13-12-1-22-5-31-12Z"/>
+        <circle cx="66" cy="56" r="10"/>
+        <path d="M46 73c5 7 12 13 21 18M68 91l8-13"/>
+  </g>
+  <path d="M25 104h78" fill="none" stroke="#27B7A8" stroke-width="5" stroke-linecap="round"/>
+</svg>

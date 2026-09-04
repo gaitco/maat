@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img">
+  <title>Khnum Templates — shaping the final form</title>
+  <rect width="128" height="128" rx="28" fill="#0B1628"/>
+  <circle cx="103" cy="25" r="6" fill="#C7543D"/>
+  <g fill="none" stroke="#FFF9EA" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M47 34h33M51 34c0 11 5 13 5 19 0 5-11 11-11 23 0 10 8 17 19 17s19-7 19-17c0-12-11-18-11-23 0-6 5-8 5-19"/>
+        <path d="M45 76h38M38 93h52"/>
+  </g>
+  <path d="M25 104h78" fill="none" stroke="#C7543D" stroke-width="5" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img">
+  <title>Cartouche Tokens — protected identity</title>
+  <rect width="128" height="128" rx="28" fill="#0B1628"/>
+  <circle cx="103" cy="25" r="6" fill="#D6A84B"/>
+  <g fill="none" stroke="#FFF9EA" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="40" y="25" width="48" height="69" rx="24"/>
+        <path d="M33 94h62M64 49a9 9 0 1 0 0 18 9 9 0 0 0 0-18ZM64 67v12"/>
+  </g>
+  <path d="M25 104h78" fill="none" stroke="#D6A84B" stroke-width="5" stroke-linecap="round"/>
+</svg>

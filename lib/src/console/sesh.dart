@@ -3,6 +3,7 @@ import 'dart:io';
 import '../foundation/application.dart';
 import 'command.dart';
 import 'commands/about_command.dart';
+import 'commands/api_commands.dart';
 import 'commands/channel_list_command.dart';
 import 'commands/key_generate_command.dart';
 import 'commands/make_channel_command.dart';
@@ -37,6 +38,8 @@ class Sesh {
   /// Framework commands. Later tasks add entries here.
   static List<Command> builtIn() => [
     AboutCommand(),
+    ApiClientCommand(),
+    ApiOpenApiCommand(),
     ChannelListCommand(),
     KeyGenerateCommand(),
     MakeChannelCommand(),

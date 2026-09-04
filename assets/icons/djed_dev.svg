@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img">
+  <title>Djed Local Dev — stable foundations</title>
+  <rect width="128" height="128" rx="28" fill="#0B1628"/>
+  <circle cx="103" cy="25" r="6" fill="#D6A84B"/>
+  <g fill="none" stroke="#FFF9EA" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M46 35h36M43 46h42M40 57h48M49 57v35M79 57v35M40 92h48M55 69h18M55 81h18"/>
+  </g>
+  <path d="M25 104h78" fill="none" stroke="#D6A84B" stroke-width="5" stroke-linecap="round"/>
+</svg>

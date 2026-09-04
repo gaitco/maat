@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img">
+  <title>Sistrum Notifications — the shaken chime</title>
+  <rect width="128" height="128" rx="28" fill="#0B1628"/>
+  <circle cx="103" cy="25" r="6" fill="#C7543D"/>
+  <g fill="none" stroke="#FFF9EA" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M64 98V78M53 98h22"/>
+        <path d="M46 78V56c0-13 8-21 18-21s18 8 18 21v22"/>
+        <path d="M38 55h52M38 67h52"/>
+  </g>
+  <path d="M25 104h78" fill="none" stroke="#C7543D" stroke-width="5" stroke-linecap="round"/>
+</svg>

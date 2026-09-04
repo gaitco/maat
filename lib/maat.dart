@@ -1,6 +1,12 @@
 /// Maat: a full-stack backend framework for Dart.
 library;
 
+export 'src/api/api_document.dart';
+export 'src/api/dart_client_writer.dart';
+export 'src/api/openapi_writer.dart';
+export 'src/api/route_contract.dart';
+export 'src/api/rule_schema.dart';
+export 'src/api/schema.dart';
 export 'src/auth/auth.dart';
 export 'src/auth/authenticatable.dart';
 export 'src/auth/authenticate.dart';
@@ -19,6 +25,7 @@ export 'src/config/config.dart';
 export 'src/config/env.dart';
 export 'src/console/sesh.dart';
 export 'src/console/command.dart';
+export 'src/console/commands/api_commands.dart';
 export 'src/console/commands/serve_command.dart';
 export 'src/console/commands/channel_list_command.dart';
 export 'src/console/commands/make_channel_command.dart';

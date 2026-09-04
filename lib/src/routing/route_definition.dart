@@ -1,4 +1,7 @@
+import '../api/route_contract.dart';
+import '../api/schema.dart';
 import '../http/request.dart';
+import '../validation/form_request.dart';
 import 'router.dart';
 
 /// One registered route: methods, URI pattern, handler, middleware, name.
@@ -28,6 +31,102 @@ class RouteDefinition {
   bool _streamsRequestBody = false;
   String? _name;
   Router? router;
+
+  /// What this route accepts and returns, once something declares it.
+  /// `null` until then, which is also what keeps the route out of the
+  /// generated API document.
+  RouteContract? contract;
+
+  RouteContract get _contract => contract ??= RouteContract();
+
+  /// A one-line title for the operation.
+  RouteDefinition summary(String text) {
+    _contract.summary = text;
+    return this;
+  }
+
+  /// The longer prose shown under the summary.
+  RouteDefinition describe(String text) {
+    _contract.description = text;
+    return this;
+  }
+
+  RouteDefinition tags(List<String> names) {
+    _contract.tags.addAll(names);
+    return this;
+  }
+
+  /// Overrides the generated operation id, which is also the generated
+  /// client's method name.
+  RouteDefinition operation(String id) {
+    _contract.operationId = id;
+    return this;
+  }
+
+  /// Types the URI's `{placeholders}` with validation rules. Path parameters
+  /// always arrive as strings; this is what lets the generated client take an
+  /// `int id` and the document say `integer`.
+  RouteDefinition params(Map<String, Object> rules) {
+    for (final name in rules.keys) {
+      if (!paramNames.contains(name)) {
+        throw ArgumentError(
+          'Route [$uri] has no parameter named [$name]. Its parameters are '
+          '${paramNames.isEmpty ? '(none)' : paramNames.join(', ')}.',
+        );
+      }
+    }
+    _contract.pathRules.addAll(rules);
+    return this;
+  }
+
+  /// Query string rules, in the same form the validator takes.
+  RouteDefinition query(Map<String, Object> rules) {
+    _contract.queryRules.addAll(rules);
+    return this;
+  }
+
+  /// The JSON request body, as a rule map or the [FormRequest] the handler
+  /// validates with.
+  RouteDefinition body(Object rules) {
+    if (rules is FormRequest) {
+      _contract.useFormRequest(rules);
+    } else if (rules is Map<String, Object>) {
+      _contract.bodyRules.addAll(rules);
+    } else {
+      throw ArgumentError(
+        'Route [$uri] body must be a rule map or a FormRequest, got '
+        '${rules.runtimeType}',
+      );
+    }
+    return this;
+  }
+
+  /// Declares one response. Call it once per status a client should expect;
+  /// `ApiSchema.none()` is an empty body such as a 204.
+  RouteDefinition responds(
+    ApiSchema schema, {
+    int status = 200,
+    String? description,
+  }) {
+    if (status < 100 || status > 599) {
+      throw ArgumentError.value(
+        status,
+        'status',
+        'An API response status must be between 100 and 599.',
+      );
+    }
+    _contract.responses[status] = ApiResponse(
+      status,
+      schema,
+      description: description,
+    );
+    return this;
+  }
+
+  RouteDefinition deprecate() {
+    _contract.deprecated = true;
+    return this;
+  }
 
   String? get routeName => _name;
   bool get isStatic => paramNames.isEmpty;

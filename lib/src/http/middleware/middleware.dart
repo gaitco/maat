@@ -71,11 +71,7 @@ class MiddlewareConfig {
     if (entry is Middleware) return entry;
     if (entry is MiddlewareFunction) return _FunctionMiddleware(entry);
     if (entry is String) {
-      final colon = entry.indexOf(':');
-      final name = colon < 0 ? entry : entry.substring(0, colon);
-      final params = colon < 0
-          ? const <String>[]
-          : entry.substring(colon + 1).split(',');
+      final (:name, :params) = parseMiddlewareAlias(entry);
       final target = _aliases[name];
       if (target == null) {
         throw ArgumentError('Unknown middleware alias [$name].');
@@ -96,4 +92,19 @@ class MiddlewareConfig {
   List<Middleware> resolveAll(Iterable<Object> entries) => [
     for (final e in entries) resolve(e),
   ];
+}
+
+/// Splits `throttle:60,1` into its alias and parameters.
+///
+/// Only the first colon separates the two, so a parameter may itself contain
+/// one — `ability:books:write` is the alias `ability` with the single
+/// parameter `books:write`.
+({String name, List<String> params}) parseMiddlewareAlias(String entry) {
+  final colon = entry.indexOf(':');
+  return colon < 0
+      ? (name: entry, params: const <String>[])
+      : (
+          name: entry.substring(0, colon),
+          params: entry.substring(colon + 1).split(','),
+        );
 }
